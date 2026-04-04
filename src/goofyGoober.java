@@ -11,21 +11,29 @@ public class goofyGoober {
 
 
         //unending cycle of betting
-        while (input.hasNextLine()) {
+        while (true) {
             String vidInfo = input.nextLine();
-            System.err.println("SAIN REA: " + vidInfo);
+            //System.err.println("Line: " + vidInfo);
 
             if (vidInfo.startsWith("video.")) {
+                //checking if Video Games is present in line
+                boolean isRelevant = vidInfo.contains("video.category=Video Games") ||
+                        vidInfo.contains("viewer.interests=Video Games");
                 //bidding
-                //testing purposes always bidding, start 1, max 10
-                System.out.println("1 5");
+                if (isRelevant) {
+                    System.out.println("400 8000");
+                } else {
+                    System.out.println("50 300");
+                }
                 System.out.flush();
-                System.err.println("SAATSIN PAKKUMISE: 1 5");
+
             } else if (vidInfo.startsWith("W ") || vidInfo.equals("L")) {
                 //result
-                System.err.println("TULEMUS KÄES: " + vidInfo);
+                System.err.println("Result: " + vidInfo);
             } else if (vidInfo.startsWith("S ")) {
                 //Summary -> moving on
+            } else {
+
             }
         }
     }
