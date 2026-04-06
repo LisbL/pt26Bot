@@ -23,7 +23,7 @@ public class goofyGoober {
 
             //System.err.println("Line: " + vidInfo);
             if (vidInfo.isEmpty()) continue; //skip trash
-            if (vidInfo.startsWith("video.")) {
+            if (vidInfo.contains("video.")) {
                 //Category, interests and subscription are important
                 //checking if Video Games is present in line
                 if (vidInfo.contains("video.category=Video Games")) adScore +=4;
@@ -98,7 +98,7 @@ public class goofyGoober {
                     efficiency = (double) points / spent;
                 }
             } else {
-
+                continue;
             }
         }
     }
