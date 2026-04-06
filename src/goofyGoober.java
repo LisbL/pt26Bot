@@ -27,31 +27,42 @@ public class goofyGoober {
                 //Category, interests and subscription are important
                 //checking if Video Games is present in line
                 if (vidInfo.contains("video.category=Video Games")) adScore +=8;
-                if (vidInfo.contains("viewer.interests=Video Games")) adScore +=6;
-                if (vidInfo.contains("viewer.subscribed=Y")) adScore += 3;
+                int interestsIdx = vidInfo.indexOf("viewer.interests=");
+                if (interestsIdx != -1) {
+                    int start = interestsIdx + "viewer.interests=".length();
+                    int end = vidInfo.indexOf(",", start);
+                    if (end == -1) end = vidInfo.length();
+
+                    String interests = vidInfo.substring(start, end);
+
+                    if (interests.contains("Video Games")) {
+                        adScore += 6;
+                    }
+                }
+                if (vidInfo.contains("viewer.subscribed=Y")) adScore += 5;
 
                 //engagement
 
                 int comments = extractNumber(vidInfo, "video.commentCount=");
                 int views = extractNumber(vidInfo, "video.viewCount=");
 
-                if (views > 0 && (comments * 100 / views) > 2) {
+                if (views > 0 && (comments * 100 / views) > 1) {
                     adScore += 4;//this means good engagement
                 }
 
                 //bidding
                 int startBid;
                 int endBid;
-                int baseBid = (int) (adScore * 20 * efficiency);
+                int baseBid = (int) (Math.pow(adScore, 2) * 10 * efficiency);
 
                 if (adScore >= 15) {//really good
-                    startBid = baseBid / 2;
-                    endBid = baseBid * 4;
+                    startBid = baseBid;
+                    endBid = baseBid * 6;
                 } else if (adScore >= 8) {//good
-                    startBid = baseBid / 4;
-                    endBid = baseBid * 2;
+                    startBid = baseBid / 2;
+                    endBid = baseBid * 3;
                 } else if (adScore >= 4) {//so and so
-                    startBid = 10;
+                    startBid = 20;
                     endBid = baseBid;
                 } else {
                     startBid = 1;
@@ -63,6 +74,11 @@ public class goofyGoober {
                     endBid *= 0.5; //saving money
                 } else if (money > budget * 0.7) {
                     endBid *= 1.2; //be more aggressive
+                }
+
+                //saving money more later
+                if (money < budget * 0.1) {
+                    endBid *= 0.3;
                 }
 
                 //efficiency
