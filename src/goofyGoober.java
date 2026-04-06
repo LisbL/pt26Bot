@@ -28,13 +28,11 @@ public class goofyGoober {
                 int commentId = vidInfo.indexOf("video.commentCount=");
                 int viewId = vidInfo.indexOf("video.viewCount=");
 
-                if (commentId != -1 && viewId != -1) {
-                    int comments = extractNumber(vidInfo, "video.commentCount=");
-                    int views = extractNumber(vidInfo, "video.viewCount=");
+                int comments = extractNumber(vidInfo, "video.commentCount=");
+                int views = extractNumber(vidInfo, "video.viewCount=");
 
-                    if (views > 0 && (comments * 100 / views) > 2) {
-                        adScore += 4;//this means good engagement
-                    }
+                if (views > 0 && (comments * 100 / views) > 2) {
+                    adScore += 4;//this means good engagement
                 }
 
                 //bidding
@@ -76,12 +74,15 @@ public class goofyGoober {
 
             } else if (vidInfo.startsWith("W ")) {
                 //Updating budget
-                int cost = Integer.parseInt(vidInfo.split(" ")[1]);
+                int space = vidInfo.indexOf(' ');
+                int cost = Integer.parseInt(vidInfo.substring(space + 1));
                 money -= cost;
             } else if (vidInfo.startsWith("S ")) {
-                String[] parts = vidInfo.split(" ");
-                int points = Integer.parseInt(parts[1]);
-                int spent = Integer.parseInt(parts[2]);
+                int first = vidInfo.indexOf(' ');
+                int second = vidInfo.indexOf(' ', first + 1);
+
+                int points = Integer.parseInt(vidInfo.substring(first + 1, second));
+                int spent = Integer.parseInt(vidInfo.substring(second + 1));
 
                 if (spent > 0) {
                     efficiency = (double) points / spent;
