@@ -1,20 +1,26 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class goofyGoober {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int budget = Integer.parseInt(args[0]);
         int money = budget;
         //choosing a category
         System.out.println("Video Games");
         System.out.flush();
 
-        Scanner input = new Scanner(System.in);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         double efficiency = 1.0; // for adjusting bidding intensity
 
         //unending cycle of betting
         while (true) {
-            int adScore = 0;
-            String vidInfo = input.nextLine().trim();
+            int adScore = 0; //Score to judge whether the bid should be higher or lower
+
+            String vidInfo = input.readLine();
+            if (vidInfo == null) break;
+            vidInfo = vidInfo.trim();
+
             //System.err.println("Line: " + vidInfo);
             if (vidInfo.isEmpty()) continue; //skip trash
             if (vidInfo.startsWith("video.")) {
@@ -78,6 +84,8 @@ public class goofyGoober {
                 int cost = Integer.parseInt(vidInfo.substring(space + 1));
                 money -= cost;
             } else if (vidInfo.startsWith("S ")) {
+
+                //Updating bidding tactic
                 int first = vidInfo.indexOf(' ');
                 int second = vidInfo.indexOf(' ', first + 1);
 
