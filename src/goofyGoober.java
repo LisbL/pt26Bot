@@ -31,8 +31,6 @@ public class goofyGoober {
                 if (vidInfo.contains("viewer.subscribed=Y")) adScore += 3;
 
                 //engagement
-                int commentId = vidInfo.indexOf("video.commentCount=");
-                int viewId = vidInfo.indexOf("video.viewCount=");
 
                 int comments = extractNumber(vidInfo, "video.commentCount=");
                 int views = extractNumber(vidInfo, "video.viewCount=");
@@ -74,6 +72,10 @@ public class goofyGoober {
 
                 //lastly adding randomness to bidding
                 endBid += (int) (Math.random() * 200);
+
+                //additional safety check to prevent negatives / overflow bids
+                if (endBid < startBid) endBid = startBid;
+                if (endBid < 1) endBid = 1;
 
                 System.out.println(startBid + " " + endBid);//outgoing bid
                 System.out.flush();
