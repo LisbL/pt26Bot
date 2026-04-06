@@ -26,8 +26,8 @@ public class goofyGoober {
             if (vidInfo.contains("video.")) {
                 //Category, interests and subscription are important
                 //checking if Video Games is present in line
-                if (vidInfo.contains("video.category=Video Games")) adScore +=4;
-                if (vidInfo.contains("viewer.interests=Video Games")) adScore +=5;
+                if (vidInfo.contains("video.category=Video Games")) adScore +=8;
+                if (vidInfo.contains("viewer.interests=Video Games")) adScore +=6;
                 if (vidInfo.contains("viewer.subscribed=Y")) adScore += 3;
 
                 //engagement
@@ -42,18 +42,20 @@ public class goofyGoober {
                 //bidding
                 int startBid;
                 int endBid;
-                if (adScore >= 12) {//really good
-                    startBid = 500;
-                    endBid = 8000;
+                int baseBid = (int) (adScore * 20 * efficiency);
+
+                if (adScore >= 15) {//really good
+                    startBid = baseBid / 2;
+                    endBid = baseBid * 4;
                 } else if (adScore >= 8) {//good
-                    startBid = 300;
-                    endBid = 3000;
+                    startBid = baseBid / 4;
+                    endBid = baseBid * 2;
                 } else if (adScore >= 4) {//so and so
-                    startBid = 100;
-                    endBid = 500;
+                    startBid = 10;
+                    endBid = baseBid;
                 } else {
                     startBid = 1;
-                    endBid = 10;
+                    endBid = 5;
                 }
 
                 //adding aggression
@@ -73,9 +75,14 @@ public class goofyGoober {
                 //lastly adding randomness to bidding
                 endBid += (int) (Math.random() * 200);
 
+                //don't want to bid more than what I have
+                if (endBid > money) endBid = money;
+                if (startBid > money) startBid = money;
+
                 //additional safety check to prevent negatives / overflow bids
                 if (endBid < startBid) endBid = startBid;
                 if (endBid < 1) endBid = 1;
+                if (startBid < 1) startBid = 1;
 
                 System.out.println(startBid + " " + endBid);//outgoing bid
                 System.out.flush();
